@@ -1,0 +1,25 @@
+---
+ - name: Get archivematica-dashboard configuration
+   sudo: yes
+   command: /usr/bin/wget -q https://raw.githubusercontent.com/artefactual/archivematica/stable/1.2.x/localDevSetup/apache/apache.default -O /etc/apache2/sites-available/default
+ - name: restart apache2
+   sudo: yes
+   service: name=apache2 state=reloaded
+ - name: run freshclam
+   sudo: yes
+   command: freshclam
+ - name: restart clamav
+   sudo: yes
+   service: name=clamav-daemon state=started
+ - name: restart elasticsearch
+   sudo: yes
+   service: name=elasticsearch state=restarted
+ - name: restart gearman
+   sudo: yes
+   service: name=gearman-job-server state=reloaded
+ - name: start mcp-server
+   sudo: yes
+   service: name=archivematica-mcp-server state=started
+ - name: start mcp-client
+   sudo: yes
+   service: name=archivematica-mcp-client state=started

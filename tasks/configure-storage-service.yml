@@ -1,0 +1,16 @@
+---
+ - name: remove nginx default
+   sudo: yes
+   file: path=/etc/nginx/sites-enabled/default state=absent
+ - name: setup nginx sites available
+   sudo: yes
+   command: ln -s /etc/nginx/sites-available/storage /etc/nginx/sites-enabled/storage creates=/etc/nginx/sites-enabled/storage
+ - name: setup uwsgi apps avaiable
+   sudo: yes
+   command: ln -s /etc/uwsgi/apps-available/storage.ini /etc/uwsgi/apps-enabled/storage.ini creates=/etc/uwsgi/apps-enabled/storage.ini
+ - name: restart nginx
+   sudo: yes
+   service: name=nginx state=reloaded
+ - name: restart uwsgi
+   sudo: yes
+   service: name=uwsgi state=restarted

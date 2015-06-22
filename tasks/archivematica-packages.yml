@@ -1,0 +1,20 @@
+---
+ - name: Install python-curl
+   sudo: yes
+   apt: pkg='python-pycurl' state=present
+
+ - name: Add archivematica PPA
+   sudo: yes
+   apt_repository: repo=ppa:'{{ item }}' state=present
+   with_items:
+     - '{{ ppa }}'
+ 
+ - name: Install archivematica packages
+   sudo: yes
+   apt: pkg='{{ item }}' state=present update_cache=yes
+   with_items:
+     - gearman
+     - archivematica-mcp-server
+     - archivematica-mcp-client
+     - archivematica-dashboard
+     - git

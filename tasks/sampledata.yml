@@ -1,0 +1,4 @@
+---
+- name: checkout out Archivematica sample data
+  sudo: yes
+  git: repo=https://github.com/artefactual/archivematica-sampledata.git dest=/home/artefactual/archivematica-sampledata update=no
