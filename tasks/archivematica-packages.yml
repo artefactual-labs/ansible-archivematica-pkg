@@ -1,4 +1,5 @@
 ---
+ - apt: update_cache=true
  - name: Install python-curl
    sudo: yes
    apt: pkg='python-pycurl' state=present
@@ -8,7 +9,16 @@
    apt_repository: repo=ppa:'{{ item }}' state=present
    with_items:
      - '{{ ppa }}'
- 
+
+ - apt_repository: repo="{{item}}" update_cache=false
+   register: multiverse_installed
+   when: ansible_distribution == 'Ubuntu'
+   with_items:
+     - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+     - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+     - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+     - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+
  - name: Install archivematica packages
    sudo: yes
    apt: pkg='{{ item }}' state=present update_cache=yes

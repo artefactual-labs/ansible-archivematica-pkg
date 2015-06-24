@@ -5,7 +5,7 @@
  - name: setup nginx sites available
    sudo: yes
    command: ln -s /etc/nginx/sites-available/storage /etc/nginx/sites-enabled/storage creates=/etc/nginx/sites-enabled/storage
- - name: setup uwsgi apps avaiable
+ - name: setup uwsgi apps available
    sudo: yes
    command: ln -s /etc/uwsgi/apps-available/storage.ini /etc/uwsgi/apps-enabled/storage.ini creates=/etc/uwsgi/apps-enabled/storage.ini
  - name: restart nginx

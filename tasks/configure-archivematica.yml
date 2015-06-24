@@ -1,7 +1,20 @@
 ---
- - name: Get archivematica-dashboard configuration
+
+ - name: remove apache default enabled sites
    sudo: yes
-   command: /usr/bin/wget -q https://raw.githubusercontent.com/artefactual/archivematica/stable/1.2.x/localDevSetup/apache/apache.default -O /etc/apache2/sites-available/default
+   file: path=/etc/apache2/sites-enabled/{{ item }} state=absent
+   with_items:
+       - "default"
+       - "000-default.conf"
+
+ - name: Get archivematica-dashboard apache configuration
+   sudo: yes
+   command: /usr/bin/wget -q https://raw.githubusercontent.com/artefactual/archivematica/stable/1.2.x/localDevSetup/apache/apache.default -O /etc/apache2/sites-available/default.conf
+
+ - name: setup apache sites available
+   sudo: yes
+   command: ln -s /etc/apache2/sites-available/default.conf /etc/apache2/sites-enabled/default.conf creates=/etc/apache2/sites-enabled/default.conf
+
  - name: restart apache2
    sudo: yes
    service: name=apache2 state=reloaded
