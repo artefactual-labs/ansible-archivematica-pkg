@@ -36,3 +36,6 @@
  - name: start mcp-client
    sudo: yes
    service: name=archivematica-mcp-client state=started
+ - name: start fits
+   sudo: yes
+   service: name=fits state=started
