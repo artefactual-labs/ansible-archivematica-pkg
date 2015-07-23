@@ -1,5 +1,6 @@
 ---
 - apt: update_cache=true
+  sudo: yes
 
 - name: Install python-curl
   apt: pkg='python-pycurl' state=present
