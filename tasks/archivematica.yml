@@ -1,41 +1,67 @@
 ---
+ - name: Install gearman 
+   become: yes
+   apt: name=gearman
+
+ - name: Install Archivematica common 
+   become: yes
+   apt: name=archivematica-common
+
+ - name: Install Archivematica MCP Server 
+   become: yes
+   apt: name=archivematica-mcp-server
+ 
+ - name: Install Archivematica MCP Client 
+   become: yes
+   apt: name=archivematica-mcp-client
+
+ - name: Install Archivematica Dashboard. 
+   become: yes
+   apt: name=archivematica-dashboard
 
  - name: remove apache default enabled sites
-   sudo: yes
+   become: yes
    file: path=/etc/apache2/sites-enabled/{{ item }} state=absent
    with_items:
        - "default"
        - "000-default.conf"
 
  - name: Get archivematica-dashboard apache configuration
-   sudo: yes
-   command: /usr/bin/wget -q https://raw.githubusercontent.com/artefactual/archivematica/stable/1.2.x/localDevSetup/apache/apache.default -O /etc/apache2/sites-available/default.conf
+   become: yes
+   command: /usr/bin/wget -q https://raw.githubusercontent.com/artefactual/archivematica/stable/1.5.x/localDevSetup/apache/apache.default -O /etc/apache2/sites-available/default.conf
 
  - name: setup apache sites available
-   sudo: yes
+   become: yes
    command: ln -s /etc/apache2/sites-available/default.conf /etc/apache2/sites-enabled/default.conf creates=/etc/apache2/sites-enabled/default.conf
 
  - name: restart apache2
-   sudo: yes
+   become: yes
    service: name=apache2 state=reloaded
+
  - name: run freshclam
-   sudo: yes
+   become: yes
    command: freshclam
+
  - name: restart clamav
-   sudo: yes
+   become: yes
    service: name=clamav-daemon state=started
+
  - name: restart elasticsearch
-   sudo: yes
+   become: yes
    service: name=elasticsearch state=restarted
+
  - name: restart gearman
-   sudo: yes
+   become: yes
    service: name=gearman-job-server state=reloaded
+
  - name: start mcp-server
-   sudo: yes
+   become: yes
    service: name=archivematica-mcp-server state=started
+
  - name: start mcp-client
-   sudo: yes
+   become: yes
    service: name=archivematica-mcp-client state=started
+
  - name: start fits
-   sudo: yes
+   become: yes
    service: name=fits state=started
