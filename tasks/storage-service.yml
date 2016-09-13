@@ -1,16 +1,25 @@
 ---
+ - name: Install storage service
+   become: yes
+   apt: name=archivematica-storage-service
+
  - name: remove nginx default
-   sudo: yes
+   become: yes
    file: path=/etc/nginx/sites-enabled/default state=absent
+
  - name: setup nginx sites available
-   sudo: yes
+   become: yes
    command: ln -s /etc/nginx/sites-available/storage /etc/nginx/sites-enabled/storage creates=/etc/nginx/sites-enabled/storage
+
  - name: setup uwsgi apps available
-   sudo: yes
+   become: yes
    command: ln -s /etc/uwsgi/apps-available/storage.ini /etc/uwsgi/apps-enabled/storage.ini creates=/etc/uwsgi/apps-enabled/storage.ini
+
  - name: restart nginx
-   sudo: yes
+   become: yes
    service: name=nginx state=reloaded
+
  - name: restart uwsgi
-   sudo: yes
+   become: yes
    service: name=uwsgi state=restarted
+
