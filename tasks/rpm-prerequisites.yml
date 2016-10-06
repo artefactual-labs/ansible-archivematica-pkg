@@ -1,0 +1,65 @@
+---
+- name: Install epel-release repo
+  yum: name=epel-release state=latest
+
+- name: Install forensics repo
+  command: rpm -Uvh https://forensics.cert.org/cert-forensics-tools-release-el7.rpm creates=/etc/yum.repos.d/cert-forensics-tools.repo
+
+- name: Install nux multimedia repo
+  command: rpm -Uvh https://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm creates=/etc/yum.repos.d/nux-dextop.repo
+
+- name: Install elasticsearch repo
+  yum_repository: 
+     name: elasticsearch-1.7
+     description: Elasticsearch repository for 1.7 packages
+     baseurl: https://packages.elastic.co/elasticsearch/1.7/centos
+     gpgcheck: yes
+     gpgkey: https://packages.elastic.co/GPG-KEY-elasticsearch
+     enabled: yes
+    
+- name: Install archivematica repo
+  yum_repository: 
+     name: archivematica
+     description: Archivematica packages
+     file: archivematica
+     baseurl: https://packages.archivematica.org/1.5.x/centos
+     gpgcheck: no
+     enabled: yes
+
+- name: Install archivematica-extras repo
+  yum_repository: 
+     name: extras-archivematica
+     description: extra Archivematica packages
+     file: archivematica-extras
+     baseurl: https://packages.archivematica.org/1.5.x/centos-extras
+     gpgcheck: no
+     enabled: yes
+
+
+- name: Install  prerequisites
+  yum: name="{{ item }}" state=latest
+  with_items:
+    - java-1.8.0-openjdk-headless
+    - elasticsearch 
+    - mariadb-server
+    - gearmand
+    - sudo
+    - git
+    - MySQL-python
+
+- name: Disable tty for sudo
+  replace: dest=/etc/sudoers
+           regexp='^Defaults    requiretty'
+           replace='#Defaults    requiretty'
+      
+- name: Enable services
+  service: name="{{ item }}" state=restarted enabled=yes
+  with_items:
+    - elasticsearch 
+    - mariadb
+    - gearmand
+  when: ansible_virtualization_type != "docker"   
+
+- name: command
+  shell: echo 'Defaults:archivematica !requiretty' > /etc/sudoers.d/archivematica
+ 
