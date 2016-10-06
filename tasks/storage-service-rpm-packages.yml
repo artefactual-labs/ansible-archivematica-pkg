@@ -17,3 +17,4 @@
   with_items:
     - archivematica-storage-service
     - nginx
+  when: ansible_virtualization_type != "docker"
