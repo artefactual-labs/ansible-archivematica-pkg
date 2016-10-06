@@ -6,7 +6,7 @@
 
  - name: Add archivematica PPA
    sudo: yes
-   apt_repository: repo=ppa:'{{ item }}' state=present
+   apt_repository: repo="ppa:{{ item }}" state=present
    with_items:
      - '{{ ppa }}'
 
@@ -18,6 +18,8 @@
      - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
      - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
      - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+     - 'deb http://packages.archivematica.org/1.5.x/ubuntu {{ansible_distribution_release}} main'
+     - 'deb http://packages.archivematica.org/1.5.x/ubuntu-externals {{ansible_distribution_release}} main'
 
  - name: Install archivematica packages
    sudo: yes

@@ -11,6 +11,8 @@
  - name: restart nginx
    sudo: yes
    service: name=nginx state=reloaded
+   
  - name: restart uwsgi
    sudo: yes
    service: name=uwsgi state=restarted
+   when: ansible_virtualization_type != "docker"
