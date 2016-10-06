@@ -29,8 +29,24 @@
     - /etc/clamd.d/scan.conf
     - /etc/freshclam.conf
 
+- name: Add archivematica user to clamscan group
+  user: name="archivematica" groups="clamscan" append="yes"
+
+- name: Enable clamav socket
+  replace: dest="/etc/clamd.d/scan.conf"
+           regexp='^#LocalSocket /var/run/clamd.scan/clamd.sock'
+           replace='LocalSocket /var/run/clamd.scan/clamd.sock'
+
+- name: Change clamav permissions
+  replace: dest="/etc/clamd.d/scan.conf"
+           regexp='^#LocalSocketMode 660'
+           replace='LocalSocketMode 770'
+
 - name: Run freschlam
   command: /usr/bin/freshclam
+
+- name: Create 7z alias
+  file: src="/usr/bin/7za" dest="/usr/bin/7z" state=link
 
 - name: Enable archivematica services
   service: name="{{ item }}" enabled=yes state=restarted
