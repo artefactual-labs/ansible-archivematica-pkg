@@ -1,0 +1,19 @@
+---
+- name: Install archivematica-storage-service
+  yum: name="{{ item }}" state=latest
+  with_items:
+    - python-pip
+    - archivematica-storage-service
+
+- name: Configure storage service
+  become_user: archivematica
+  shell: 'export $(cat /etc/sysconfig/archivematica-storage-service) && \
+          cd /usr/share/archivematica/storage-service && \
+          /usr/lib/python2.7/archivematica/storage-service/bin/python manage.py migrate && \
+         /usr/lib/python2.7/archivematica/storage-service/bin/python manage.py collectstatic --noinput '
+
+- name: Enable archivematica storage services
+  service: name="{{ item }}" enabled=yes state=restarted
+  with_items:
+    - archivematica-storage-service
+    - nginx
