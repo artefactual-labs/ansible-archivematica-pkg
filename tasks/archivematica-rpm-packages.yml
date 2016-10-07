@@ -1,0 +1,60 @@
+---
+- name: Install archivematica dashboard
+  yum: name="{{ item }}" state=latest
+  with_items:
+    - archivematica-common
+    - archivematica-mcp-server
+    - archivematica-mcp-client
+    - archivematica-dashboard
+    - python-six
+#    - python-oletools
+
+- name: Create mysql database
+  mysql_db: name=MCP state=present encoding=utf8
+
+- name: Create mysql uesr
+  mysql_user: name=archivematica password=demo priv=MCP.*:ALL state=present
+
+- name: Configure archivematica dashboard
+  become_user: archivematica
+  shell: 'export $(cat /etc/sysconfig/archivematica-dashboard) && \
+      cd /usr/share/archivematica/dashboard && \
+      /usr/lib/python2.7/archivematica/dashboard/bin/python manage.py syncdb --noinput'
+
+- name: Enable clamav
+  replace: dest="{{ item }}" 
+           regexp='^Example'
+           replace='#Example'
+  with_items:
+    - /etc/clamd.d/scan.conf
+    - /etc/freshclam.conf
+
+- name: Add archivematica user to clamscan group
+  user: name="archivematica" groups="clamscan" append="yes"
+
+- name: Enable clamav socket
+  replace: dest="/etc/clamd.d/scan.conf"
+           regexp='^#LocalSocket /var/run/clamd.scan/clamd.sock'
+           replace='LocalSocket /var/run/clamd.scan/clamd.sock'
+
+- name: Change clamav permissions
+  replace: dest="/etc/clamd.d/scan.conf"
+           regexp='^#LocalSocketMode 660'
+           replace='LocalSocketMode 770'
+
+- name: Run freschlam
+  command: /usr/bin/freshclam
+
+- name: Create 7z alias
+  file: src="/usr/bin/7za" dest="/usr/bin/7z" state=link
+
+- name: Enable archivematica services
+  service: name="{{ item }}" enabled=yes state=restarted
+  with_items:
+    - archivematica-mcp-server
+    - archivematica-mcp-client
+    - archivematica-dashboard
+    - fits-nailgun
+    - nginx
+    - clamd@scan
+  when: ansible_virtualization_type != "docker"

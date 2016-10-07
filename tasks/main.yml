@@ -1,6 +1,16 @@
 ---
-- include: storage-service-packages.yml  tags=archivematica-ss
+- include: storage-service-debian-packages.yml  tags=archivematica-ss
+  when: ansible_distribution == 'Ubuntu'
+- include: rpm-prerequisites.yml  tags=archivematica-ss
+  when: ansible_distribution == 'CentOS'
 - include: configure-storage-service.yml tags=archivematica-ss
-- include: archivematica-packages.yml    tags=archivematica-am
+  when: ansible_distribution == 'Ubuntu'
+- include: storage-service-rpm-packages.yml  tags=archivematica-ss
+  when: ansible_distribution == 'CentOS'
+- include: archivematica-debian-packages.yml    tags=archivematica-am
+  when: ansible_distribution == 'Ubuntu'
 - include: configure-archivematica.yml   tags=archivematica-am
+  when: ansible_distribution == 'Ubuntu'
+- include: archivematica-rpm-packages.yml  tags=archivematica-am
+  when: ansible_distribution == 'CentOS'
 - include: sampledata.yml                tags=archivematica-sampledata

@@ -1,0 +1,4 @@
+lxml
+requests<3.0
+selenium==3.0.0b3
+molecule

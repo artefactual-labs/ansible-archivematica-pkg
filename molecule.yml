@@ -1,0 +1,35 @@
+---
+driver:
+  name: vagrant
+
+vagrant:
+  platforms:
+    - name: centos7
+      box: centos/7
+      ansible_groups:
+       - archivematica
+#   - name: trusty64
+#      box: ubuntu/trusty64
+#      box_url: https://vagrantcloud.com/ubuntu/boxes/trusty64/versions/14.04/providers/virtualbox.box
+#      ansible_groups:
+#        - archivematica
+
+  providers:
+    - name: virtualbox
+      type: virtualbox
+      options:
+        memory: 4096
+        cpus: 2
+
+  instances:
+
+      - name: archivematica-packages
+        raw_config_args:
+          - "vm.network 'public_network', ip: '192.168.0.128', bridge: 'wlp1s0'"
+        ansible_groups:
+          - archivematica
+  #      options:
+  #        - append_platform_to_hostname: no
+
+verifier:
+  name: testinfra
