@@ -59,7 +59,3 @@
     - mariadb
     - gearmand
   when: ansible_virtualization_type != "docker"   
-
-- name: command
-  shell: echo 'Defaults:archivematica !requiretty' > /etc/sudoers.d/archivematica
- 
