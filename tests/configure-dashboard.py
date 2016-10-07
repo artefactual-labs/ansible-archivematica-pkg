@@ -16,12 +16,25 @@ class PyConfigureDashboard(unittest.TestCase):
         self.driver.implicitly_wait(30)
         self.base_url = os.getenv('AM_URL', 'http://192.168.0.128:81')
         self.storage_url = os.getenv('SS_URL', 'http://192.168.0.128:8001')
-        self.storage_key = os.getenv('SS_API_KEY', '1234567')
         self.verificationErrors = []
         self.accept_next_alert = True
     
     def test_py_configure_dashboard(self):
         driver = self.driver
+        driver.get(self.storage_url + "/login/?next=/")
+        driver.find_element_by_id("id_username").clear()
+        driver.find_element_by_id("id_username").send_keys("test")
+        driver.find_element_by_id("id_password").clear()
+        driver.find_element_by_id("id_password").send_keys("test")
+        driver.find_element_by_css_selector("input.btn.btn-primary").click()
+        time.sleep(3)
+        driver.find_element_by_link_text("Administration").click()
+        time.sleep(3)
+        driver.find_element_by_link_text("Users").click()
+        time.sleep(3)
+        driver.find_element_by_link_text("Edit").click()
+        ss_api_key = driver.find_element_by_css_selector("code").text
+        time.sleep(3)
         driver.get(self.base_url + "/installer/welcome/")
         driver.find_element_by_id("id_org_name").clear()
         driver.find_element_by_id("id_org_name").send_keys("test")
@@ -46,7 +59,7 @@ class PyConfigureDashboard(unittest.TestCase):
         driver.find_element_by_id("id_storage_service_url").clear()
         driver.find_element_by_id("id_storage_service_url").send_keys(self.storage_url)
         driver.find_element_by_id("id_storage_service_apikey").clear()
-        driver.find_element_by_id("id_storage_service_apikey").send_keys(self.storage_key)
+        driver.find_element_by_id("id_storage_service_apikey").send_keys(ss_api_key)
         driver.find_element_by_name("use_default").click()
     
     def is_element_present(self, how, what):
