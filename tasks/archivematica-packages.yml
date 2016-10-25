@@ -1,5 +1,8 @@
 ---
- - apt: update_cache=true
+ - name: Update apt cache
+   apt: update_cache = true
+   sudo: yes
+
  - name: Install python-curl
    sudo: yes
    apt: pkg='python-pycurl' state=present
@@ -11,6 +14,7 @@
      - '{{ ppa }}'
 
  - apt_repository: repo="{{item}}" update_cache=false
+   sudo: yes
    register: multiverse_installed
    when: ansible_distribution == 'Ubuntu'
    with_items:
