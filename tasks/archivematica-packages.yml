@@ -31,4 +31,5 @@
      - archivematica-mcp-server
      - archivematica-mcp-client
      - archivematica-dashboard
+     - elasticsearch
      - git

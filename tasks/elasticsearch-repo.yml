@@ -1,0 +1,14 @@
+---
+- name: Add GPG Key for ElasticSearch
+  sudo: yes
+  apt_key: url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch state=present
+
+- name: Add ElasticSearch Repo
+  sudo: yes
+  apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' state=present
+
+- apt: update_cache=true cache_valid_time=3600
+  sudo: yes
+
+
+

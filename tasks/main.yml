@@ -1,4 +1,5 @@
 ---
+- include: elasticsearch-repo.yml        tags=archivematica-es
 - include: storage-service-packages.yml  tags=archivematica-ss
 - include: configure-storage-service.yml tags=archivematica-ss
 - include: archivematica-packages.yml    tags=archivematica-am
