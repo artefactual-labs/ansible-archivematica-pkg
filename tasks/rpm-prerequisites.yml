@@ -22,7 +22,7 @@
      name: archivematica
      description: Archivematica packages
      file: archivematica
-     baseurl: https://packages.archivematica.org/1.5.x/centos
+     baseurl: https://packages.archivematica.org/1.6.x/centos
      gpgcheck: no
      enabled: yes
 
@@ -31,7 +31,7 @@
      name: extras-archivematica
      description: extra Archivematica packages
      file: archivematica-extras
-     baseurl: https://packages.archivematica.org/1.5.x/centos-extras
+     baseurl: https://packages.archivematica.org/1.6.x/centos-extras
      gpgcheck: no
      enabled: yes
 

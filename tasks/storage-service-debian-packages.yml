@@ -8,13 +8,16 @@
     - python-pycurl
     - apt-transport-https
 
-- name: Add archivematica PPA
-  sudo: yes
-  apt_repository: repo='ppa:archivematica/externals' state=present
+#- name: Add archivematica PPA
+#  sudo: yes
+#  apt_repository: repo='ppa:archivematica/externals' state=present
 #  with_items:
     #- '{{ ppa }}'
 
 # https://github.com/ansible/ansible/issues/9966
+- name: Add archivematica repository key
+  apt_key: url="https://packages.archivematica.org/1.6.x/development.asc" state=present validate_certs=false
+
 - name: Add archivematica repository key
   apt_key: url="https://packages.archivematica.org/1.5.x/key.asc" state=present validate_certs=false
 
@@ -28,7 +31,7 @@
     - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
     - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
     - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
-    - 'deb http://packages.archivematica.org/1.5.x/ubuntu {{ansible_distribution_release}} main'
+    - 'deb http://packages.archivematica.org/1.6.x/ubuntu-candidate {{ansible_distribution_release}} main'
     - 'deb http://packages.archivematica.org/1.5.x/ubuntu-externals {{ansible_distribution_release}} main'
 
 - name: Install archivematica storage service packages
