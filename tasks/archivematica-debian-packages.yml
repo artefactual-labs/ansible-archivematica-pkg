@@ -19,7 +19,7 @@
      - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
      - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
      - 'deb http://packages.archivematica.org/1.6.x/ubuntu-candidate {{ansible_distribution_release}} main'
-     - 'deb http://packages.archivematica.org/1.5.x/ubuntu-externals {{ansible_distribution_release}} main'
+     - 'deb http://packages.archivematica.org/1.6.x/ubuntu-externals {{ansible_distribution_release}} main'
 
  - name: Install archivematica packages
    sudo: yes
