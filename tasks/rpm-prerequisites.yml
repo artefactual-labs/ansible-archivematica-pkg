@@ -45,6 +45,7 @@
     - gearmand
     - sudo
     - git
+    - policycoreutils-python
     - MySQL-python
 
 - name: Disable tty for sudo
@@ -60,6 +61,19 @@
     - gearmand
   when: ansible_virtualization_type != "docker"   
 
-- name: command
+- name: "Disable requiretty for archivematica user"
   shell: echo 'Defaults:archivematica !requiretty' > /etc/sudoers.d/archivematica
+
+- name: "Allow nginx to bind to port 8001"
+  shell:  semanage port -a -t http_port_t  -p tcp 8001
+  ignore_errors: yes
+  changed_when: false
+  when: (ansible_selinux is defined) and
+        (ansible_selinux.status != "disabled")
+
+- name: Grant Nginx permissions to proxy requests to an upstream [SELinux]
+  shell: setsebool httpd_can_network_connect on -P
+  changed_when: false
+  when: (ansible_selinux is defined) and
+        (ansible_selinux.status != "disabled")
  
