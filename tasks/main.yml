@@ -1,4 +1,6 @@
 ---
+- include: python-workaround.yml
+  when: ansible_distribution == 'Ubuntu'
 - include: storage-service-debian-packages.yml  tags=archivematica-ss
   when: ansible_distribution == 'Ubuntu'
 - include: rpm-prerequisites.yml  tags=archivematica-ss
