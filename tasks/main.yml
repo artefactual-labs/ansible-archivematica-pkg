@@ -12,7 +12,7 @@
 - include: archivematica-debian-packages.yml    tags=archivematica-am
   when: ansible_distribution == 'Ubuntu'
 - include: configure-archivematica.yml   tags=archivematica-am
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'Ubuntu' and ansible_virtualization_type != "docker"
 - include: archivematica-rpm-packages.yml  tags=archivematica-am
   when: ansible_distribution == 'CentOS'
 - include: sampledata.yml                tags=archivematica-sampledata
